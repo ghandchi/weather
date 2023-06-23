@@ -1,0 +1,30 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: weather
+          predicates:
+            - Path=/weather/**
+          uri: lb://WEATHER
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+    leaseRenewalIntervalInSeconds: 3
+    hostname: localhost
+#    nonSecurePortEnabled: false
+#    securePortEnabled: true
+
+#logging:
+#  level:
+#    org.springframework: trace

@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  discovery:
+    container_name: discovery
+    image: inpress/discovery:1.0.0
+    networks:
+      - inpress-network
+    restart: unless-stopped
+
+  gateway:
+    container_name: gateway
+    image: inpress/gateway:1.0.0
+    networks:
+      - inpress-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery
+    restart: unless-stopped
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
+      eureka.instance.hostname: gateway
+
+  weather:
+    image: inpress/weather:1.0.0
+    networks:
+      - inpress-network
+    depends_on:
+      - gateway
+    restart: unless-stopped
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
+      eureka.instance.hostname: weather
+    deploy:
+      replicas: 3
+
+networks:
+  inpress-network:
+    driver: bridge

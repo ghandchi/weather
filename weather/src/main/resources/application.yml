@@ -1,0 +1,25 @@
+server:
+  port: 0
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: weather
+
+application:
+  weather:
+    base-url: "https://api.openweathermap.org"
+    connection-timeout: 5000
+    response-timeout: 5000
+    read-timeout: 5000
+    write-timeout: 5000
+    appid: b8b24d2ddad287dde3a0e3ae98da0fd2
+  date-time-pattern: "yyyy-MM-dd"
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+    leaseRenewalIntervalInSeconds: 3
+    hostname: localhost
